@@ -86,9 +86,9 @@ def create_agent_chain(_llm,_retriever,_memory,serpapi_api_key):
         search = SerpAPIWrapper(serpapi_api_key=serpapi_api_key)
         tools = [
             Tool(
-                name="Code QA",
+                name="Uploaded Files",
                 func=retriever.run,
-                description="The user has uploaded python files. Anytime you need to reference these files use this tool. Input should be a fully formed question.",
+                description="The user has uploaded files. Anytime you need to reference those files use this. Input should be a fully formed question.",
             ),
             Tool(
                 name="Google Search",
@@ -108,8 +108,11 @@ def load_llm(openai_api_key):
 
 st.title("🦜🔗 Context Coderbot")
 
-openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
-"[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
+if st.secrets['OPENAI_API_KEY']:
+    openai_api_key = st.secrets['OPENAI_API_KEY']
+else:
+    openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+    "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
 
 if not openai_api_key:
     st.info("Please add your OpenAI API key to continue.")
@@ -130,7 +133,11 @@ if uploaded_files:
 msgs = StreamlitChatMessageHistory()
 memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
 
-serpapi_api_key = st.sidebar.text_input("SerpAPI Key", type="password")
+if st.secrets['SERPAPI_API_KEY']:
+    serpapi_api_key = st.secrets['SERPAPI_API_KEY']
+else:
+    serpapi_api_key = st.sidebar.text_input("SerpAPI Key", type="password")
+
 if not serpapi_api_key:
     st.info("Please add your SerpAPI key to continue.")
     st.stop()
@@ -152,4 +159,4 @@ if new_query := st.chat_input(placeholder='Write your messages here.'):
         retrieval_handler = PrintRetrievalHandler(st.container())
         stream_handler = StreamHandler(st.empty())
         response = agent_chain.run(new_query, callbacks=[retrieval_handler, stream_handler])
-        st.chat_message('assistant').write(response)
+        st.write(response)
