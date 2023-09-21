@@ -8,18 +8,17 @@ from langchain.document_loaders.parsers import LanguageParser
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
-from langchain.agents import initialize_agent, Tool
-from langchain.agents import AgentType
+from langchain.agents import Tool
+from langchain.agents.agent_toolkits import create_retriever_tool
+from langchain.agents.agent_toolkits.conversational_retrieval.openai_functions import create_conversational_retrieval_agent
 from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain.memory import ConversationBufferMemory
-from langchain.tools import BaseTool
 from langchain.utilities import SerpAPIWrapper
 from langchain.callbacks.base import BaseCallbackHandler
 
 @st.cache_resource
-def generate_retriever(files,_llm,openai_api_key):        
+def generate_retriever(files,openai_api_key):        
 
     with tempfile.TemporaryDirectory() as tmp_dir_name:
 
@@ -41,9 +40,7 @@ def generate_retriever(files,_llm,openai_api_key):
         texts = python_splitter.split_documents(docs)
         
         db = Chroma.from_documents(texts, OpenAIEmbeddings(openai_api_key=openai_api_key,disallowed_special=()))
-        retriever = RetrievalQA.from_chain_type(
-            llm=llm, chain_type="stuff", retriever=db.as_retriever(search_type="mmr", search_kwargs = {"k": 8})
-                    )
+        retriever = db.as_retriever(search_type="mmr", search_kwargs = {"k": 8})
         
     return retriever
 
@@ -81,14 +78,14 @@ class PrintRetrievalHandler(BaseCallbackHandler):
         self.status.update(state="complete")
 
 # @st.cache_resource
-def create_agent_chain(_llm,_retriever,_memory,serpapi_api_key):
+def create_agent_chain(_llm,_retriever,serpapi_api_key):
                 
         search = SerpAPIWrapper(serpapi_api_key=serpapi_api_key)
         tools = [
-            Tool(
+            create_retriever_tool(
                 name="Uploaded Files",
-                func=retriever.run,
-                description="The user has uploaded files. Anytime you need to reference those files use this. Input should be a fully formed question.",
+                retriever=_retriever,
+                description="The user has uploaded files. Anytime you need to reference those files reference this. Input should be a fully formed question.",
             ),
             Tool(
                 name="Google Search",
@@ -97,7 +94,8 @@ def create_agent_chain(_llm,_retriever,_memory,serpapi_api_key):
             ),
         ]
 
-        agent = initialize_agent(tools, llm, agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION, verbose=True, memory=memory)
+        system_message = None
+        agent = create_conversational_retrieval_agent(tools, _llm, verbose=True, system_message=system_message,remember_intermediate_steps=True)
         
         return agent
 
@@ -114,8 +112,13 @@ else:
     openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
     "[Get an OpenAI API key](https://platform.openai.com/account/api-keys)"
 
-if not openai_api_key:
-    st.info("Please add your OpenAI API key to continue.")
+if st.secrets['SERPAPI_API_KEY']:
+    serpapi_api_key = st.secrets['SERPAPI_API_KEY']
+else:
+    serpapi_api_key = st.sidebar.text_input("SerpAPI Key", type="password")
+
+if not openai_api_key or not serpapi_api_key:
+    st.info("Please add your OpenAI API key and your SerpAPI key to continue.")
     st.stop()
 
 llm = load_llm(openai_api_key)
@@ -127,22 +130,15 @@ if not uploaded_files:
     st.stop()
 
 if uploaded_files:
-    retriever = generate_retriever(uploaded_files,llm,openai_api_key)
+    retriever = generate_retriever(uploaded_files,openai_api_key)
     st.write('Files Processed Successfully!')
 
 msgs = StreamlitChatMessageHistory()
 memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
 
-if st.secrets['SERPAPI_API_KEY']:
-    serpapi_api_key = st.secrets['SERPAPI_API_KEY']
-else:
-    serpapi_api_key = st.sidebar.text_input("SerpAPI Key", type="password")
 
-if not serpapi_api_key:
-    st.info("Please add your SerpAPI key to continue.")
-    st.stop()
 
-agent_chain = create_agent_chain(llm,retriever,memory,serpapi_api_key)
+agent_chain = create_agent_chain(llm,retriever,serpapi_api_key)
         
 if len(msgs.messages) == 0:
     msgs.clear()
