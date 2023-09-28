@@ -9,6 +9,7 @@ dependencies:
   - appdirs=1.4.4=pyh9f0ad1d_0
   - asttokens=2.4.0=pyhd8ed1ab_0
   - async-timeout=4.0.3=pyhd8ed1ab_0
+  - atomicwrites=1.4.1=pyhd8ed1ab_0
   - attrs=23.1.0=pyh71513ae_1
   - backcall=0.2.0=pyh9f0ad1d_0
   - backoff=1.11.1=pyhd8ed1ab_0
@@ -33,6 +34,7 @@ dependencies:
   - contourpy=1.1.1=py311h005e61a_0
   - cryptography=41.0.4=py311h28e9c30_0
   - cycler=0.11.0=pyhd8ed1ab_0
+  - dataclasses=0.8=pyhc8e2a94_3
   - dataclasses-json=0.5.7=pyhd8ed1ab_0
   - debugpy=1.8.0=py311h12c1d0e_0
   - decorator=5.1.1=pyhd8ed1ab_0
@@ -64,12 +66,14 @@ dependencies:
   - ipython=8.15.0=pyh5737063_0
   - jedi=0.19.0=pyhd8ed1ab_0
   - joblib=1.3.2=pyhd8ed1ab_0
+  - js2py=0.74=pyhd8ed1ab_0
   - jupyter_client=8.3.1=pyhd8ed1ab_0
   - jupyter_core=5.3.1=py311h1ea47a8_0
   - kiwisolver=1.4.5=py311h005e61a_0
   - krb5=1.21.2=heb0366b_0
   - langchain=0.0.293=pyhd8ed1ab_0
   - langsmith=0.0.38=pyhd8ed1ab_0
+  - lark=1.1.7=pyhd8ed1ab_0
   - lcms2=2.15=he9d350c_2
   - lerc=4.0.0=h63175ca_0
   - libabseil=20230802.1=cxx17_h63175ca_0
@@ -102,6 +106,7 @@ dependencies:
   - m2w64-gcc-libs-core=5.3.0=7
   - m2w64-gmp=6.1.0=2
   - m2w64-libwinpthread-git=5.0.0.4634.697f757=2
+  - markdown=3.4.4=pyhd8ed1ab_0
   - markdown-it-py=3.0.0=pyhd8ed1ab_0
   - marshmallow=3.20.1=pyhd8ed1ab_0
   - marshmallow-enum=1.5.1=pyh9f0ad1d_3
@@ -149,8 +154,10 @@ dependencies:
   - pycparser=2.21=pyhd8ed1ab_0
   - pydantic=1.10.12=py311ha68e1ae_1
   - pygments=2.16.1=pyhd8ed1ab_0
+  - pyjsparser=2.7.1=pyh8c360ce_0
   - pyopenssl=23.2.0=pyhd8ed1ab_1
   - pyparsing=3.1.1=pyhd8ed1ab_0
+  - pypdf=3.16.2=pyhd8ed1ab_0
   - pypika=0.48.9=pyhd8ed1ab_0
   - pyreadline3=3.4.1=py311h1ea47a8_2
   - pysocks=1.7.1=pyh0701188_6
@@ -200,6 +207,7 @@ dependencies:
   - typing_inspect=0.9.0=pyhd8ed1ab_0
   - typing_utils=0.1.0=pyhd8ed1ab_0
   - tzdata=2023c=h71feb2d_0
+  - tzlocal=5.0.1=py311h1ea47a8_1
   - ucrt=10.0.22621.0=h57928b3_0
   - urllib3=1.26.15=pyhd8ed1ab_0
   - uvicorn=0.23.2=py311h1ea47a8_0
@@ -219,5 +227,19 @@ dependencies:
   - zipp=3.17.0=pyhd8ed1ab_0
   - zstd=1.5.5=h12be248_0
   - pip:
+      - beautifulsoup4==4.12.2
+      - chardet==5.2.0
+      - codeboxapi==0.0.15
+      - codeinterpreterapi==0.0.10
+      - emoji==2.8.0
+      - filetype==1.2.0
       - google-search-results==2.4.2
+      - lxml==4.9.3
+      - nltk==3.8.1
+      - python-iso639==2023.6.15
+      - python-magic==0.4.27
+      - soupsieve==2.5
+      - tabulate==0.9.0
+      - unstructured==0.10.16
+      - websockets==11.0.3
 prefix: C:\Users\esmba\miniconda3\envs\ContextCoderEnv
