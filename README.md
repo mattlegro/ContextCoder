@@ -10,7 +10,7 @@ In this repository, this technique has been applied to two domains: code generat
 
 ## Context Coder
 
-One domain we can imagine applying RAG to is in code generation. LLMs have started to show promising performance in code generation tasks, but they are not often aware of the intimate details of specific public modules, and they are definitely not aware of user developed code. However, if we create a knowledge base from code files, the LLM can be provided this context. This has been implemented and can be run as a local streamlit app, found in this repo! Simply fork the repo and create an environment from the .yml file, navigate to the directory, provide the path to your files, and in your terminal of choice run `streamlit run CC_app.py`. Even better, if you have an OpenAI API key and a SerpAPI key, you can try it out [here](https://contextcoder-mattlegro.streamlit.app/), hosted on Streamlit's Cloud Service (Note that streamlit has a upload limit of 200mb, and you have to upload indivdual files, not a directory)! 
+One domain we can imagine applying RAG to is in code generation. LLMs have started to show promising performance in code generation tasks, but they are not often aware of the intimate details of specific public modules, and they are definitely not aware of user developed code. However, if we create a knowledge base from code files, the LLM can be provided this context. This has been implemented and can be run as a local streamlit app, found in this repo! Simply fork the repo and create an environment from the .yml file, navigate to the directory, and in your terminal of choice run `streamlit run CC_app.py`! 
 
 Why say more? What does Context Coder have to say, when asked about itself?
 
