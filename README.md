@@ -18,21 +18,21 @@ Why say more? What does Context Coder have to say, when asked about itself?
 
 Pretty cool. Now, we can see it is more than capable of understanding code it has access to. But how well can it generate code? When I first started up the app, only the most recent messages were being displayed. So, I uploaded the CC_app.py file and asked how to fix it.
 
-<img src="media/CC_slef_fix.png">
+<img src="media/CC_self_fix.png">
 
 Sure enough, the suggested fix worked. I have used it in the `AgenticRag_Coder` notebook for help in other instances when writing the app, and I will certainly use it to speed up future projects.
 
 ## Context Writer
 
-A second domain where LLMs are performing well is content generation. They have proven capable of writing on broad subjects or on topics well within the range of general knowledge, but technical details can be a challenge. In this case, a vectorstore is created containing the contents of primary source scholarly articles, specifically related to the impact of various forms of exercise on Parkinson's Disease patients' symptoms. Then, a basic outline, which can be found [here](paperfiles/outline.pdf), was provided. By asking the LangChain Agent to generate specific sections, as
+A second domain where LLMs are performing well is content generation. They have proven capable of writing on broad subjects or on topics well within the range of general knowledge, but technical details can be a challenge. In this case, a vectorstore is created containing the contents of primary source scholarly articles, specifically related to the impact of various forms of exercise on Parkinson's Disease patients' symptoms. Then, a basic outline, which can be found [here](paper_files/outline.pdf), was provided. By asking the LangChain Agent to generate specific sections, as
 
-<img src="media/generate_text.png">
+<img src="media/generate_text.PNG">
 
 a rough first draft was generated. To improve the way the language flowed, an editing pass was done.
 
-<img src="media/edit.png">
+<img src="media/edit.PNG">
 
-In the same way, it generated an abstract, title, introduction, and conclusion. Lastly, it created a reference list in AMA format, organized them in order of appearance in the paper in the references list, then verified all references by looking them on google scholar. All the generation history can be found in the notebook `AgenticRAG_PaperWriter`. The final draft itself, a continuing medical education (CME) review on the impact of exercise on Parkinson's symptoms, can be found [here](paperfiles/draft.pdf) 
+In the same way, it generated an abstract, title, introduction, and conclusion. Lastly, it created a reference list in AMA format, organized them in order of appearance in the paper in the references list, then verified all references by looking them on google scholar. All the generation history can be found in the notebook `AgenticRAG_PaperWriter`. The final draft itself, a continuing medical education (CME) review on the impact of exercise on Parkinson's symptoms, can be found [here](paper_files/draft.pdf) 
 
 ## Future Plans
 
