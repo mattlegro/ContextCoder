@@ -32,7 +32,7 @@ a rough first draft was generated. To improve the way the language flowed, an ed
 
 <img src="media/edit.PNG">
 
-In the same way, it generated an abstract, title, introduction, and conclusion. Lastly, it created a reference list in AMA format, organized them in order of appearance in the paper in the references list, then verified all references by looking them on google scholar. All the generation history can be found in the notebook `AgenticRAG_PaperWriter`. The final draft itself, a continuing medical education (CME) review on the impact of exercise on Parkinson's symptoms, can be found [here](paper_files/draft.pdf) 
+In the same way, it generated an abstract, title, introduction, and conclusion. Lastly, it created a reference list in AMA format, organized them in order of appearance in the paper in the references list, then verified all references by looking them on google scholar. All the generation history can be found in the notebook `AgenticRAG_PaperWriter`. The final draft itself, a continuing medical education (CME) review on the impact of exercise on Parkinson's symptoms, can be found [here](paper_files/draft.pdf). 
 
 ## Future Plans
 
