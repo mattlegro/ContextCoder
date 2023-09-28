@@ -1,6 +1,5 @@
 name: ContextCoderEnv
 channels:
-  - conda-forge
   - defaults
 dependencies:
   - aiohttp=3.8.5=py311ha68e1ae_0
