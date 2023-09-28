@@ -101,7 +101,7 @@ def create_agent_chain(_llm,_retriever,serpapi_api_key):
 
 # @st.cache_resource
 def load_llm(openai_api_key):
-    llm = ChatOpenAI(model_name="gpt-4",temperature=0,openai_api_key=openai_api_key)
+    llm = ChatOpenAI(model_name="gpt-4",temperature=0.2,top_p=0.1,openai_api_key=openai_api_key)
     return llm
 
 st.title("🦜🔗 Context Coderbot")
@@ -135,8 +135,6 @@ if uploaded_files:
 
 msgs = StreamlitChatMessageHistory()
 memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
-
-
 
 agent_chain = create_agent_chain(llm,retriever,serpapi_api_key)
         
