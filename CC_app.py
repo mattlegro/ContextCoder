@@ -145,12 +145,14 @@ if len(msgs.messages) == 0:
 avatars = {"human": "user", "ai": "assistant"}
 for msg in msgs.messages:
     st.chat_message(avatars[msg.type]).write(msg.content)
-
+    
 if new_query := st.chat_input(placeholder='Write your messages here.'):
     st.chat_message('user').write(new_query)
+    msgs.add_user_message(new_query)
 
     with st.chat_message("assistant"):
         retrieval_handler = PrintRetrievalHandler(st.container())
         stream_handler = StreamHandler(st.empty())
         response = agent_chain({"input":new_query}, callbacks=[retrieval_handler, stream_handler])
         st.write(response['output'])
+        msgs.add_ai_message(response['output'])
