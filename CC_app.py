@@ -1,6 +1,7 @@
 import streamlit as st
 import tempfile
 import os
+import langchain
 
 from langchain.text_splitter import Language
 from langchain.document_loaders.generic import GenericLoader
@@ -8,7 +9,7 @@ from langchain.document_loaders.parsers import LanguageParser
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Chroma
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.chat_models import ChatOpenAI
+from langchain.chat_models.openai import ChatOpenAI
 from langchain.agents import Tool
 from langchain.agents.agent_toolkits import create_retriever_tool
 from langchain.agents.agent_toolkits.conversational_retrieval.openai_functions import create_conversational_retrieval_agent
@@ -78,24 +79,22 @@ class PrintRetrievalHandler(BaseCallbackHandler):
         self.status.update(state="complete")
 
 # @st.cache_resource
-def create_agent_chain(_llm,_retriever,serpapi_api_key):
+def create_agent_chain(llm,retriever,serpapi_api_key):
                 
         search = SerpAPIWrapper(serpapi_api_key=serpapi_api_key)
         tools = [
             create_retriever_tool(
-                name="Uploaded Files",
-                retriever=_retriever,
+                name="Uploaded-Files",
+                retriever=retriever,
                 description="The user has uploaded files. Anytime you need to reference those files reference this. Input should be a fully formed question.",
             ),
             Tool(
-                name="Google Search",
+                name="Google-Search",
                 func=search.run,
                 description="Use to search the internet for relevant information when you do not know the answer, or to provide additional specifics or context.",
             ),
         ]
-
-        system_message = None
-        agent = create_conversational_retrieval_agent(tools, _llm, verbose=True, system_message=system_message,remember_intermediate_steps=True)
+        agent = create_conversational_retrieval_agent(llm, tools, verbose=True,remember_intermediate_steps=True)
         
         return agent
 
@@ -116,6 +115,7 @@ if st.secrets['SERPAPI_API_KEY']:
     serpapi_api_key = st.secrets['SERPAPI_API_KEY']
 else:
     serpapi_api_key = st.sidebar.text_input("SerpAPI Key", type="password")
+    "[Get an Serp API key](https://serpapi.com/)"
 
 if not openai_api_key or not serpapi_api_key:
     st.info("Please add your OpenAI API key and your SerpAPI key to continue.")
@@ -152,5 +152,5 @@ if new_query := st.chat_input(placeholder='Write your messages here.'):
     with st.chat_message("assistant"):
         retrieval_handler = PrintRetrievalHandler(st.container())
         stream_handler = StreamHandler(st.empty())
-        response = agent_chain.run(new_query, callbacks=[retrieval_handler, stream_handler])
-        st.write(response)
+        response = agent_chain({"input":new_query}, callbacks=[retrieval_handler, stream_handler])
+        st.write(response['output'])
